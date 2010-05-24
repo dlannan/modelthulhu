@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-
-
 namespace Modelthulhu
 {
     public class ModelIntersectTree
