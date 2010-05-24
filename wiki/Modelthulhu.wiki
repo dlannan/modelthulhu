@@ -2,12 +2,4 @@
 
 = Introduction =
 
-*Modelthulhu* is a class library for real-time Constructive Solid Geometry (CSG), but really just mesh Boolean ops.
-
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+*Modelthulhu* is a class library for real-time Constructive Solid Geometry (CSG), but really just mesh Boolean ops. It is written in the C# programming language.
