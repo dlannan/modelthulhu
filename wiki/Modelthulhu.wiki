@@ -3,3 +3,13 @@
 = Introduction =
 
 *Modelthulhu* is a class library for real-time Constructive Solid Geometry (CSG), but really just mesh Boolean ops. It is written in the C# programming language.
+
+= Development Progress =
+
+== Current Status ==
+
+Modelthulhu has been extracted from the project into which it was originally integrated. The extracted project does not build, but fixing this should be trivial.
+
+== Prior to Extraction ==
+
+The CSG code was working properly prior to extraction, but did not yet work in real-time. Getting that to happen will require some non-trivial work, with significant refactoring and redesign of some aspects.
