@@ -4,7 +4,7 @@ using System.Text;
 
 
 
-namespace Modelthulhu
+namespace Modelthulhu.Triangulated
 {
     public class EdgeIntersection
     {

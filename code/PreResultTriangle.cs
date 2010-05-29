@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Modelthulhu.Math3D;
+using Modelthulhu.UserModel;
 
-
-namespace Modelthulhu
+namespace Modelthulhu.Triangulated
 {
     public class PreResultTriangle
     {

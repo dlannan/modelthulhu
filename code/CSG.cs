@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Modelthulhu.Math3D;
+using Modelthulhu.Geom;
+using Modelthulhu.UserModel;
+using Modelthulhu.Triangulated;
+
 namespace Modelthulhu
 {
     public enum RegionBehavior

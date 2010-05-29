@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Modelthulhu
+using Modelthulhu.Math3D;
+
+namespace Modelthulhu.Geom
 {
     // Struct representing a bounding sphere
     public struct BoundingSphere

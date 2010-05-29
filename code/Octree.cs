@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Modelthulhu
+using Modelthulhu.Math3D;
+using Modelthulhu.Geom;
+
+namespace Modelthulhu.NSided
 {
     public class Octree
     {

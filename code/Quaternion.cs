@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Modelthulhu
+namespace Modelthulhu.Math3D
 {
     // Represents a Quaternion
     // Thanks to Wikipedia for lots of formulas and barely-adequate explanation of what's going on in them!

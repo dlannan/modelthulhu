@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Modelthulhu
+namespace Modelthulhu.Math3D
 {
     // Utility class for generating random stuff,
     // including 3d stuff, of the random variety

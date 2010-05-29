@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Modelthulhu
+namespace Modelthulhu.UserModel
 {
     public class VInfoReference
     {
