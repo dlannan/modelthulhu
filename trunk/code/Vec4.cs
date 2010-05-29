@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Modelthulhu
+namespace Modelthulhu.Math3D
 {
     // Struct representing a 4D vector
     public struct Vec4

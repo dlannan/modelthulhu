@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Modelthulhu
+using Modelthulhu.Math3D;
+
+namespace Modelthulhu.Geom
 {
     public struct AABB
     {

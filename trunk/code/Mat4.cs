@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Modelthulhu
+namespace Modelthulhu.Math3D
 {
     // Represents a 4x4 matrix
     // Functions in this class assume the element order is:

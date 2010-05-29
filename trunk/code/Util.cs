@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Modelthulhu.Math3D;
+using Modelthulhu.Geom;
+
 namespace Modelthulhu
 {
     // Collection of math utility functions

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Modelthulhu.Math3D;
 
-
-namespace Modelthulhu
+namespace Modelthulhu.NSided
 {
     public class CSGVertex
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Modelthulhu
+namespace Modelthulhu.NSided
 {
     // would just be a polygon, but since it can potentially have 'holes' it's a bit more than just that
     public class CSGShape
