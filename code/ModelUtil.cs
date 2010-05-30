@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Modelthulhu.Math3D;
+using Modelthulhu.UserModel;
 
 namespace Modelthulhu.NSided
 {
