@@ -9,12 +9,15 @@ using Modelthulhu.Triangulated;
 
 namespace Modelthulhu
 {
+    // A region may either be scrapped outright, kept, or kept but flipped (inside out)
     public enum RegionBehavior
     {
         Delete,
         Normal,
         Flip
     }
+
+    // Functions with this signature may be used as delegate functions to determine whether to scrap, flip, or keep a region.
     public delegate RegionBehavior RegionKeepCondition(List<PreResultTriangle> regionTriangles);
 
     // Uh... well...
@@ -33,9 +36,6 @@ namespace Modelthulhu
         private BasicModelData first_out, second_out;
         public BasicModelData FirstOutput { get { return first_out; } protected set { first_out = value; } }
         public BasicModelData SecondOutput { get { return second_out; } protected set { second_out = value; } }
-        // Set this before doing stuff
-        private OperationType op;
-        public OperationType OperationType { get { return op; } set { op = value; } }
         private bool invert_first, invert_second;
         public bool InvertFirstObjectNormals { get { return invert_first; } set { invert_first = value; } }
         public bool InvertSecondObjectNormals { get { return invert_second; } set { invert_second = value; } }
@@ -46,16 +46,13 @@ namespace Modelthulhu
 
         protected ModelInput first_blob, second_blob;
 
-        public int pairs_to_test;
-
-        public static string message = "";
-
         public List<Vec3> cutPoints;
         public List<Vec3[]> cutEdges;
 
+        // Currently this is the only constructor, and it requires an OperationType value
+        // It will automatically generate the RegionKeepCondition delegate functions (via MajorityCondition)
         public CSG(OperationType op)
         {
-            this.op = op;
             first_keep = MajorityCondition(
                 ((p) => second_blob.IsPointInside(p)), 
                 DoesOpAccept(op, 0, true) ? invert_first ? RegionBehavior.Flip : RegionBehavior.Normal : RegionBehavior.Delete, 
@@ -66,7 +63,7 @@ namespace Modelthulhu
                 DoesOpAccept(op, 1, false) ? invert_first ? RegionBehavior.Flip : RegionBehavior.Normal : RegionBehavior.Delete);
         }
 
-        // Do stuff
+        // Do the CSG stuff
         // This is a virtual function, just in case someone thinks they can do it better
         public virtual void Compute()
         {
@@ -109,8 +106,6 @@ namespace Modelthulhu
         // Get out the scissors !!!
         protected virtual void Snip(ModelInput in_a, ModelInput in_b, List<TrianglePair> pairs)
         {
-            pairs_to_test = pairs.Count;
-
             List<int> first_tris = new List<int>();
             List<int> second_tris = new List<int>();
             foreach (TrianglePair pair in pairs)
@@ -159,8 +154,6 @@ namespace Modelthulhu
                     if (!cutPoints.Exists((v) => (v - vert).ComputeMagnitudeSquared() < 0.0000000000000000000001))
                         cutPoints.Add(vert);
 
-            message = cutPoints.Count + " edge points";
-
             List<BasicModelVert> first_bmv_trimmed = ScrapTrimmedStuff(first_safe_bmv, first_notsafe_bmv, cutEdges, first_keep);
             List<BasicModelVert> second_bmv_trimmed = ScrapTrimmedStuff(second_safe_bmv, second_notsafe_bmv, cutEdges, second_keep);
 
@@ -168,6 +161,7 @@ namespace Modelthulhu
             second_out = BMVListToModel(second_bmv_trimmed);
         }
 
+        // After the cuts are done, finds continuous regions of the surface of one of the input models and returns the properly trimmed/flipped regions
         protected virtual List<BasicModelVert> ScrapTrimmedStuff(List<BasicModelVert> safeZone, List<BasicModelVert> notsafeZone, List<Vec3[]> cutEdges, RegionKeepCondition regionCondition)
         {
             PreResultModel prm = new PreResultModel();
@@ -177,6 +171,8 @@ namespace Modelthulhu
             return prm.Trim(regionCondition);
         }
 
+        // Function that transforms stuff and does interpolation for vertices that were created in the middles of faces
+        // TODO: replace with a generic user-vertex-info function
         public static BasicModelVert WorkingVertexToBMV(Vec3 position, VInfoReference[] vinfos, BasicModelData input_model, Mat4 input_xform, WorkingModel working_model)
         {
             Vec3 normal = Vec3.Zero;
@@ -198,13 +194,9 @@ namespace Modelthulhu
             return new BasicModelVert { position = position, normal = Vec3.Normalize(normal), uv = uv };
         }
 
-        public bool DoesOpAccept(int fromWhich, bool insideOther)
-        {
-            bool outside = !insideOther;
-            OperationType needed = fromWhich == 0 ? outside ? OperationType.KeepFirstOutsideSecond : OperationType.KeepFirstInsideSecond : outside ? OperationType.KeepSecondOutsideFirst : OperationType.KeepSecondInsideFirst;
-            return ((op & needed) != 0);
-        }
-
+        // Uses an OperationType value to determine whether a region is kept or discarded
+        // Used for "plain" RegionKeepConditions, i.e. when the user doesn't override them
+        // Whether the regions are flipped is then determined by the InvertFirst / InvertSecond properties
         public static bool DoesOpAccept(OperationType op, int fromWhich, bool insideOther)
         {
             bool outside = !insideOther;
@@ -212,6 +204,8 @@ namespace Modelthulhu
             return ((op & needed) != 0);
         }
 
+        // Converts a list containing BasicModelVert triples to a BasicModelData object
+        // TODO: replace with a generic user-vertex-info function
         protected virtual BasicModelData BMVListToModel(List<BasicModelVert> bmVerts)
         {
             List<double> x = new List<double>();
@@ -235,7 +229,6 @@ namespace Modelthulhu
             foreach (BasicModelVert vert in bmVerts)
             {
                 int i = index % 3;
-                //int i = winding[j];
                 List<uint> target_vert = (i == 0 ? a_vert : i == 1 ? b_vert : c_vert);
                 List<uint> target_norm = (i == 0 ? a_norm : i == 1 ? b_norm : c_norm);
                 List<uint> target_uv = (i == 0 ? a_uv : i == 1 ? b_uv : c_uv);
@@ -255,6 +248,12 @@ namespace Modelthulhu
             return new BasicModelData { x = x.ToArray(), y = y.ToArray(), z = z.ToArray(), nx = nx.ToArray(), ny = ny.ToArray(), nz = nz.ToArray(), u = u.ToArray(), v = v.ToArray(), a_vert = a_vert.ToArray(), b_vert = b_vert.ToArray(), c_vert = c_vert.ToArray(), a_norm = a_norm.ToArray(), b_norm = b_norm.ToArray(), c_norm = c_norm.ToArray(), a_uv = a_uv.ToArray(), b_uv = b_uv.ToArray(), c_uv = c_uv.ToArray() };
         }
 
+        // Returns the sort of RegionKeepCondition to be used if the user doesn't manually specify one to use in place of it
+        //
+        // It's called "majority condition" because it does some odd number of ray tests to figure out whether the region is "inside" or "outside",
+        // and whichever it finds more often is the one it goes with...
+        //
+        // To avoid random flukes, basically
         public static RegionKeepCondition MajorityCondition(Predicate<Vec3> insideTestFunction, RegionBehavior insideBehavior, RegionBehavior outsideBehavior)
         {
             return new RegionKeepCondition(
