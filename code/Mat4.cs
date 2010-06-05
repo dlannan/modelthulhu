@@ -48,9 +48,6 @@ namespace Modelthulhu.Math3D
             };
         }
 
-        // Generates a 4x4 matrix with no translation/perspective components, and with rotation taken from the specified quaternion
-        public static Mat4 FromQuaternion(Quaternion q) { return FromMat3(q.ToMat3()); }
-
         // A 4x4 matrix representing an object at a specific position, with a specific orientation
         public static Mat4 FromPositionAndOrientation(Vec3 pos, Mat3 mat)
         {
@@ -65,8 +62,6 @@ namespace Modelthulhu.Math3D
                 }
             };
         }
-        // The same, but the orientation is taken from a quaternion
-        public static Mat4 FromPositionAndOrientation(Vec3 pos, Quaternion q) { return FromPositionAndOrientation(pos, q.ToMat3()); }
 
         public static Mat4 FromPosOriScale(Vec3 pos, Mat3 ori, double scale)
         {
@@ -81,7 +76,6 @@ namespace Modelthulhu.Math3D
                 }
             };
         }
-        public static Mat4 FromPosOriScale(Vec3 pos, Quaternion q, double scale) { return FromPosOriScale(pos, q.ToMat3(), scale); }
 
         // 4x4 matrix multiplication
         public static Mat4 operator *(Mat4 left, Mat4 right)

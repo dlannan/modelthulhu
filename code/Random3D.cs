@@ -84,16 +84,5 @@ namespace Modelthulhu.Math3D
             }
             return temp;
         }
-
-        public static Quaternion RandomQuaternionRotation()
-        {
-            Quaternion temp = Quaternion.Identity;
-            for (int i = 0; i < 3; i++)
-            {
-                Vec3 axis = RandomNormalizedVector(1.0);
-                temp *= Quaternion.FromAxisAngle(axis.x, axis.y, axis.z, Rand(16.0 * Math.PI));
-            }
-            return temp;
-        }
     }
 }
