@@ -1,0 +1,1 @@
+A real-time Constructive Solid Geometry package written in C#
